@@ -1,0 +1,11 @@
+﻿  stdafx.cpp
+  Vector3.cpp
+  Vector2.cpp
+  Sphere.cpp
+  RayTracer.cpp
+  Ray.cpp
+  Primitive.cpp
+  Plane.cpp
+  Generating Code...
+d:\studia\fotorealistyczna\fotorealistyczna\raytracer\vector2.h(78): warning C4715: 'Vector2::operator/': not all control paths return a value
+  RayTracer.vcxproj -> D:\Studia\Fotorealistyczna\Fotorealistyczna\x64\Debug\RayTracer.exe
