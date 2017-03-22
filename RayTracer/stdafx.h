@@ -16,6 +16,8 @@
 #include "Sphere.h"
 #include "Plane.h"
 #include "Ray.h"
+#include "LightIntensity.h"
 
+float clamp01(float value);
 
 // TODO: reference additional headers your program requires here
