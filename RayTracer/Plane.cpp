@@ -4,7 +4,7 @@
 #include "Vector3.h"
 #include <iostream>
 
-Plane::Plane() : Plane(Vector3::zero(), Vector3::right()){}
+Plane::Plane() : Plane(Vector3::zero, Vector3::right){}
 Plane::Plane(Vector3 &point, Vector3 &normal){
     this->point = point;
     this->normal = normal;

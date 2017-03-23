@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-Ray::Ray():Ray(Vector3::zero(), Vector3::zero())
+Ray::Ray():Ray(Vector3::zero, Vector3::zero)
 {
     //ctor
 }

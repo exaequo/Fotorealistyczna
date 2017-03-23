@@ -1,2 +1,4 @@
-﻿  RayTracer.cpp
+﻿  Ray.cpp
+  Plane.cpp
+  Generating Code...
   RayTracer.vcxproj -> D:\Studia\Fotorealistyczna\Fotorealistyczna\x64\Debug\RayTracer.exe

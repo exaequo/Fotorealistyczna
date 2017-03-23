@@ -5,7 +5,15 @@
 class Vector3
 {
     public:
-        Vector3():Vector3(0,0,0){}
+		static Vector3 zero;
+		static Vector3 right;
+		static Vector3 left;
+		static Vector3 forward;
+		static Vector3 back;
+		static Vector3 up;
+		static Vector3 down;
+
+		Vector3():Vector3(0,0,0){}
         Vector3(float x, float y, float z);
         virtual ~Vector3();
         const float X();
@@ -21,10 +29,7 @@ class Vector3
 
         static float dot(Vector3 &l, Vector3 &r);
         static Vector3 &cross(Vector3 &l, Vector3 &r);
-        static Vector3 &zero();
-        static Vector3 &right();
-        static Vector3 &forward();
-        static Vector3 &up();
+        
         static float distance (Vector3 &v1, Vector3 &v2);
 
 		Vector3& operator+=(Vector3& right);

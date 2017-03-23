@@ -16,7 +16,7 @@
 #include "Sphere.h"
 #include "Plane.h"
 #include "Ray.h"
-#include "LightIntensity.h"
+#include "Color.h"
 
 float clamp01(float value);
 

@@ -63,17 +63,11 @@ int main()
 	//if (type != IntersectType::MISS) { cout << "point: " << hit << endl << endl; }
 	//else { cout << endl; }
 
-	LightIntensity li1(0,0,0.75f);
-	LightIntensity li2(2, -1, 0.5f);
-	cout << li1 << ", "<<li2<< endl;
-	li1 += li2;
-	cout << li1 << ", " << li2 << endl;
-	li2 = li1/4;
-	cout << li1 << ", " << li2 << endl;
-	li1 = li2 * 2;
-	cout << li1 << ", " << li2 << endl;
-	li1 /=  3;
-	cout << li1 << ", " << li2 << endl;
+	Color c1 = Color::green;
+	
+	cout << c1 << endl;
+	//c1 /= 4;
+	cout << c1/4 << endl;
 
 	system("pause");
     return 0;

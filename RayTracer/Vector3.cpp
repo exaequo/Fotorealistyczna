@@ -3,6 +3,14 @@
 #include <string>
 #include <sstream>
 
+Vector3 Vector3::zero = Vector3(0, 0, 0);
+Vector3 Vector3::right = Vector3(1, 0, 0);
+Vector3 Vector3::left = Vector3(-1, 0, 0);
+Vector3 Vector3::forward = Vector3(0, 0, 1);
+Vector3 Vector3::back = Vector3(0, 0, -1);
+Vector3 Vector3::up = Vector3(0, 1, 0);
+Vector3 Vector3::down = Vector3(0, -1, 0);
+
 Vector3::Vector3(float x, float y, float z){
     this->x = x;
     this->y = y;
@@ -64,22 +72,7 @@ std::string Vector3::toString() {
     str <<"["<< X()<< ", "<< Y()<< ", "<< Z()<<"]";
     return str.str();
 }
-Vector3& Vector3::zero(){
-    Vector3 &result = *(new Vector3(0,0,0));
-    return result;
-}
-Vector3& Vector3::right(){
-    Vector3 &result = *(new Vector3(1,0,0));
-    return result;
-}
-Vector3& Vector3::forward(){
-    Vector3 &result = *(new Vector3(0,0,1));
-    return result;
-}
-Vector3& Vector3::up(){
-    Vector3 &result = *(new Vector3(0,1,0));
-    return result;
-}
+
 
 std::ostream & operator<<(std::ostream & Str, Vector3 & v){
   Str <<"["<< v.X()<< ", "<< v.Y()<< ", "<< v.Z()<<"]";
