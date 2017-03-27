@@ -59,6 +59,15 @@ void Vector3::normalize(){
         (*this)=(*this)/n;
     }
 }
+Vector3 Vector3::normalized()
+{
+	Vector3 result;
+	float n = magnitude();
+	if (n != 0) {
+		result = (*this)/n;
+	}
+	return result;
+}
 Vector3 &Vector3::negate(){
     Vector3 *v = new Vector3(x,y,z);
     v->x = -x;
@@ -98,6 +107,16 @@ Vector3& Vector3::operator*=(Vector3& right) {
 	this->z *= right.Z();
 	return *this;
 }
+
+Vector3 & Vector3::operator*=(const float & rhs)
+{
+	x *= rhs;
+	y *= rhs;
+	z *= rhs;
+
+	return *this;
+}
+
 Vector3& Vector3::operator/=(Vector3& right) {
 	this->x /= right.X();
 	this->y /= right.Y();
@@ -148,12 +167,13 @@ Vector3& Vector3::operator/(Vector3& right) {
 	return *(new Vector3(x, y, z));
 }
 
-Vector3& Vector3::operator*(float value) {
-	float x = X() * value;
-	float y = Y() * value;
-	float z = Z() * value;
-	return *(new Vector3(x, y, z));
-}
+//Vector3& Vector3::operator*(float value) {
+//	float x = X() * value;
+//	float y = Y() * value;
+//	float z = Z() * value;
+//	return *(new Vector3(x, y, z));
+//}
+
 Vector3& Vector3::operator/(float value) {
 	if (value != 0) {
 		float x = X() / value;
@@ -175,4 +195,22 @@ bool Vector3::operator!=(Vector3& right) {
 }
 Vector3 Vector3::operator-() const {
 	return Vector3(-x, -y, -z);
+}
+
+Vector3 operator*(const Vector3 &lhs, const float& rhs)
+{
+	Vector3 result = lhs;
+
+	result *= rhs;
+
+	return result;
+}
+
+Vector3 operator*(const float& lhs, const Vector3 &rhs)
+{
+	Vector3 result = rhs;
+
+	result *= lhs;
+
+	return result;
 }

@@ -17,6 +17,11 @@ Sphere::Sphere(Vector3& center, float radius){
     this->radius = radius;
 }
 
+Sphere::Sphere(Vector3 & center, float radius, Material & material):Sphere(center,radius)
+{
+	this->mat = material;
+}
+
 const Vector3& Sphere::Center(){
     return center;
 }
@@ -24,7 +29,7 @@ const float& Sphere::Radius(){
     return radius;
 }
 
-int Sphere::intersect(Ray& ray, float &distance, Vector3& hitpoint){
+int Sphere::intersect(Ray& ray, Vector3& hitpoint){
     int result = IntersectType::MISS;
     Vector3 v = ray.Origin() - center;
     float b = -Vector3::dot(v, ray.Direction());
@@ -35,18 +40,18 @@ int Sphere::intersect(Ray& ray, float &distance, Vector3& hitpoint){
         float i2 = b + det;
         if(i2>0){
             if(i1<0){
-                if(i2<distance){
-                    distance = i2;
+                if(i2<ray.Length()){
+                    ray.Length(i2);
                     result = IntersectType::INSIDE;
                 }
 
             }else{
-                if(i1<distance){
-                    distance = i1;
+                if(i1<ray.Length()){
+					ray.Length(i1);
                     result = IntersectType::HIT;
                 }
             }
-            hitpoint = ray.Origin() + ray.Direction() * distance;
+            hitpoint = ray.Origin() + ray.Direction() * ray.Length();
         }
 
     }

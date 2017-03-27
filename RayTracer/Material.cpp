@@ -2,9 +2,7 @@
 #include "Material.h"
 
 
-Material::Material()
-{
-}
+Material::Material() : Material(Color::white){}
 
 Material::Material(Color & color)
 {
@@ -12,9 +10,7 @@ Material::Material(Color & color)
 }
 
 
-Material::~Material()
-{
-}
+Material::~Material(){}
 
 Color & Material::MaterialColor()
 {

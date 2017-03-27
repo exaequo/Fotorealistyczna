@@ -89,12 +89,12 @@ void Color::operator()(float R)
 
 Color& Color::operator+(Color & li)
 {
-	return Color(r + li.R(), g + li.G(), b + li.B());
+	return *(new Color(r + li.R(), g + li.G(), b + li.B()));
 }
 
 Color& Color::operator-(Color & li)
 {
-	return Color(r - li.R(), g - li.G(), b - li.B());
+	return *(new Color(r - li.R(), g - li.G(), b - li.B()));
 }
 
 //Color& Color::operator/(float num)
@@ -147,11 +147,12 @@ Color & Color::operator/=(float num)
 	return *this;
 }
 
-Color & Color::operator=(Color & c)
+Color& Color::operator=(const Color &rhs)
 {
-	r = c.R();
-	g = c.G();
-	b = c.B();
+	r = rhs.r;
+	g = rhs.g;
+	b = rhs.b;
+
 	return *this;
 }
 

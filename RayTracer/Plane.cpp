@@ -15,11 +15,16 @@ Plane::Plane(Vector3 &point, Vector3 &normal){
     std::cout<<"P: origin: "<<point<<", normal: "<<this->normal<<std::endl;
 }
 
+Plane::Plane(Vector3 & point, Vector3 & normal, Material & material) : Plane(point, normal)
+{
+	this->mat = material;
+}
+
 Plane::~Plane()
 {
     //dtor
 }
-int Plane::intersect(Ray& ray, float &distance, Vector3& hitpoint){
+int Plane::intersect(Ray& ray, Vector3& hitpoint){
     int result = IntersectType::MISS;
     //float dot1 = (dist - Vector3::dot(normal, ray.Origin()));
 	float dot1 = Vector3::dot(normal, point - ray.Origin());
@@ -27,22 +32,21 @@ int Plane::intersect(Ray& ray, float &distance, Vector3& hitpoint){
     if(dot2 != 0){
         float t = dot1/dot2;
         if(t>=0){
-            if(t<distance){
+            if(t<ray.Length()){
                 result = IntersectType::HIT;
-                dist = t;
+                //dist = t;
+				ray.Length(t);
                 hitpoint = ray.Origin() + ray.Direction() * t;
             }
             if(dot2>0){
                 ray.normalOfHit = normal;
             }else{
-                ray.normalOfHit = normal.negate();
+				ray.normalOfHit = -normal;
             }
         }else{
-            std::cout<<"Intersection before origin of the ray\n";
             //Przeciecie przed punktem startu promienia
         }
     }else{
-        std::cout<<"Ray is parallel to the plane\n";
         //Wektory s¹ prostopad³e
     }
 

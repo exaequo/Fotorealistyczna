@@ -40,7 +40,7 @@ public:
 	Color& operator*=(float num);
 	Color& operator/=(float num);
 
-	Color& operator=(Color &c);
+	Color& operator=(const Color &rhs);
 	
 	friend Color& operator*(float num, Color &li);
 	friend Color& operator*(Color &li, float num);

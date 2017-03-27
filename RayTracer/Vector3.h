@@ -25,6 +25,7 @@ class Vector3
 
         float magnitude();
         void normalize();
+		Vector3 normalized();
         Vector3 &negate();
 
         static float dot(Vector3 &l, Vector3 &r);
@@ -42,9 +43,8 @@ class Vector3
 		Vector3 operator*(Vector3& right);
 
 		Vector3& operator*=(Vector3& right);
+		Vector3& operator*=(const float &value);
 		Vector3& operator/(Vector3& right);
-
-		Vector3 &operator*(float value);
 
 		Vector3 &operator/(float value);
 
@@ -62,5 +62,8 @@ class Vector3
     private:
 };
 std::ostream & operator<<(std::ostream & Str, Vector3 & v);
+
+Vector3 operator*(const Vector3 &lhs, const float &rhs);
+Vector3 operator*(const float &lhs, const Vector3 &rhs);
 Vector3 operator+(Vector3& left, Vector3& right);
 #endif // VECTOR3_H
