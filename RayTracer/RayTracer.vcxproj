@@ -155,6 +155,8 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Ray.h" />
+    <ClInclude Include="RegularSampler.h" />
+    <ClInclude Include="Sampler.h" />
     <ClInclude Include="SceneObject.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="stdafx.h" />
@@ -174,6 +176,8 @@
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="RayTracer.cpp" />
+    <ClCompile Include="RegularSampler.cpp" />
+    <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="SceneObject.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="stdafx.cpp">

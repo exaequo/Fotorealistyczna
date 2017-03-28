@@ -20,13 +20,12 @@ int main()
 	objToRender.push_back(sphere2);
 	
 
-	OrthogonalCamera cam1(640, 480, Vector3(0, 0, -10), Vector3::forward, 0, 100, 2);
+	OrthogonalCamera cam1(640, 480, Vector3(0, 0, -10), Vector3::forward, 0, 100, 2, new RegularSampler(16));
 	cam1.render(objToRender);
 	cout << "Orto rendered\n";
 
-	PerspectiveCamera cam2(640, 480, 15.0f, Vector3(0, 0, -10), Vector3::forward, 0.01f, 100);
-	/*cout << cam2.Fov() << ", " << cam2.ViewPlaneDistance() << ", W:" << cam2.W() << ", U:" << cam2.U() << ", V:" << cam2.V() << endl;
-	cout << cam2.Width() << ", " << cam2.Height() <<", " << cam2.FarPlane()<<", " << cam2.NearPlane() << endl;*/
+	PerspectiveCamera cam2(640, 480, 45.0f, Vector3(0, 0, -10), Vector3::forward, 0.01f, 100, new RegularSampler(16));
+
 	cam2.render(objToRender);
 	cout << "Persp rendered\n";
 

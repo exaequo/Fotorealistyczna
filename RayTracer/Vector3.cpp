@@ -83,32 +83,123 @@ std::string Vector3::toString() {
 }
 
 
-std::ostream & operator<<(std::ostream & Str, Vector3 & v){
-  Str <<"["<< v.X()<< ", "<< v.Y()<< ", "<< v.Z()<<"]";
-  return Str;
-}
-
-Vector3& Vector3::operator+=(Vector3& right)
+Vector3& Vector3::operator=(const Vector3 &rhs)
 {
-	this->x += right.X();
-	this->y += right.Y();
-	this->z += right.Z();
-	return *this;
-}
-Vector3& Vector3::operator-=(Vector3& right) {
-	this->x -= right.X();
-	this->y -= right.Y();
-	this->z -= right.Z();
-	return *this;
-}
-Vector3& Vector3::operator*=(Vector3& right) {
-	this->x *= right.X();
-	this->y *= right.Y();
-	this->z *= right.Z();
+	x = rhs.x;
+	y = rhs.y;
+	z = rhs.z;
+
 	return *this;
 }
 
-Vector3 & Vector3::operator*=(const float & rhs)
+Vector3& Vector3::operator/=(const Vector3 &rhs)
+{
+	x /= rhs.x;
+	y /= rhs.y;
+	z /= rhs.z;
+
+	return *this;
+}
+
+Vector3& Vector3::operator*=(const Vector3 &rhs)
+{
+	x *= rhs.x;
+	y *= rhs.y;
+	z *= rhs.z;
+
+	return *this;
+}
+
+Vector3& Vector3::operator-=(const Vector3 &rhs)
+{
+	x -= rhs.x;
+	y -= rhs.y;
+	z -= rhs.z;
+
+	return *this;
+}
+
+Vector3 Vector3::operator-() const
+{
+	Vector3 value;
+
+	value.x = -x;
+	value.y = -y;
+	value.z = -z;
+
+	return value;
+}
+
+Vector3& Vector3::operator+=(const Vector3 &rhs)
+{
+	x += rhs.x;
+	y += rhs.y;
+	z += rhs.z;
+
+	return *this;
+}
+
+Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs)
+{
+	Vector3 result = lhs;
+
+	result += rhs;
+
+	return result;
+}
+
+Vector3 operator-(const Vector3 &lhs, const Vector3 &rhs)
+{
+	Vector3 result = lhs;
+
+	result -= rhs;
+
+	return result;
+}
+
+Vector3 operator*(const Vector3 &lhs, const Vector3 &rhs)
+{
+	Vector3 result = lhs;
+
+	result *= rhs;
+
+	return result;
+}
+
+Vector3 operator/(const Vector3 &lhs, const Vector3 &rhs)
+{
+	Vector3 result = lhs;
+
+	result /= rhs;
+
+	return result;
+}
+
+std::ostream & operator<<(std::ostream &os, const Vector3 &value)
+{
+	os << "(" << value.x << ", " << value.y << ", " << value.z << ")";
+
+	return os;
+}
+
+
+bool operator==(const Vector3 &lhs, const Vector3 &rhs)
+{
+	bool result = false;
+	if (lhs.x == rhs.x && lhs.y == rhs.y && lhs.z == rhs.z)
+	{
+		result = true;
+	}
+
+	return result;
+}
+
+bool operator!=(const Vector3 &lhs, const Vector3 &rhs)
+{
+	return !(lhs == rhs);
+}
+
+Vector3& Vector3::operator*=(const float &rhs)
 {
 	x *= rhs;
 	y *= rhs;
@@ -117,84 +208,13 @@ Vector3 & Vector3::operator*=(const float & rhs)
 	return *this;
 }
 
-Vector3& Vector3::operator/=(Vector3& right) {
-	this->x /= right.X();
-	this->y /= right.Y();
-	this->z /= right.Z();
+Vector3& Vector3::operator/=(const float &rhs)
+{
+	x /= rhs;
+	y /= rhs;
+	z /= rhs;
+
 	return *this;
-}
-
-Vector3 operator+(Vector3& left, Vector3& right) {
-	float x = left.X() + right.X();
-	float y = left.Y() + right.Y();
-	float z = left.Z() + right.Z();
-	return Vector3(x, y, z);
-}
-Vector3 Vector3::operator-(Vector3& right) {
-	float x = X() - right.X();
-	float y = Y() - right.Y();
-	float z = Z() - right.Z();
-	return Vector3(x, y, z);
-}
-Vector3 Vector3::operator*(Vector3& right) {
-	float x = X() * right.X();
-	float y = Y() * right.Y();
-	float z = Z() * right.Z();
-	return Vector3(x, y, z);
-}
-Vector3& Vector3::operator/(Vector3& right) {
-	float x, y, z;
-	if (right.X() != 0) {
-		x = X() / right.X();
-	}
-	else {
-		x = INFINITY;
-	}
-
-	if (right.Y() != 0) {
-		y = Y() / right.Y();
-	}
-	else {
-		y = INFINITY;
-	}
-	if (right.Z() != 0) {
-		z = Z() / right.Z();
-	}
-	else {
-		z = INFINITY;
-	}
-	
-	return *(new Vector3(x, y, z));
-}
-
-//Vector3& Vector3::operator*(float value) {
-//	float x = X() * value;
-//	float y = Y() * value;
-//	float z = Z() * value;
-//	return *(new Vector3(x, y, z));
-//}
-
-Vector3& Vector3::operator/(float value) {
-	if (value != 0) {
-		float x = X() / value;
-		float y = Y() / value;
-		float z = Z() / value;
-		return *(new Vector3(x, y, z));
-	}
-	else {
-		std::cout << "Dividing by zero\n";
-		return *(new Vector3(INFINITY, INFINITY, INFINITY));
-	}
-}
-
-bool Vector3::operator==(Vector3& right) {
-	return (this->x == right.X() && this->y == right.Y() && this->z == right.Z());
-}
-bool Vector3::operator!=(Vector3& right) {
-	return (this->x != right.X() && this->y != right.Y() && this->z != right.Z());
-}
-Vector3 Vector3::operator-() const {
-	return Vector3(-x, -y, -z);
 }
 
 Vector3 operator*(const Vector3 &lhs, const float& rhs)
@@ -211,6 +231,15 @@ Vector3 operator*(const float& lhs, const Vector3 &rhs)
 	Vector3 result = rhs;
 
 	result *= lhs;
+
+	return result;
+}
+
+Vector3 operator/(const Vector3 &lhs, const float& rhs)
+{
+	Vector3 result = lhs;
+
+	result /= rhs;
 
 	return result;
 }

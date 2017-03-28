@@ -25,6 +25,8 @@
 #include "PerspectiveCamera.h"
 #include "BMP.h"
 #include "Image.h"
+#include "Sampler.h"
+#include "RegularSampler.h"
 
 float clamp01(float value);
 

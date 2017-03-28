@@ -33,26 +33,17 @@ class Vector3
         
         static float distance (Vector3 &v1, Vector3 &v2);
 
-		Vector3& operator+=(Vector3& right);
-		Vector3& operator-=(Vector3& right);
-
-		Vector3 operator-(Vector3& right);
-
-		
-
-		Vector3 operator*(Vector3& right);
-
-		Vector3& operator*=(Vector3& right);
-		Vector3& operator*=(const float &value);
-		Vector3& operator/(Vector3& right);
-
-		Vector3 &operator/(float value);
-
-		Vector3& operator/=(Vector3& right);
-
-		bool operator==(Vector3& right);
-		bool operator!=(Vector3& right);
+		Vector3& operator=(const Vector3 &rhs);
+		Vector3& operator+=(const Vector3 &rhs);
+		Vector3& operator-=(const Vector3 &rhs);
 		Vector3 operator-() const;
+		Vector3& operator*=(const Vector3 &rhs);
+		Vector3& operator/=(const Vector3 &rhs);
+		Vector3& operator*=(const float &rhs);
+		Vector3& operator/=(const float &rhs);
+
+		friend bool operator==(const Vector3 &lhs, const Vector3 &rhs);
+		friend std::ostream &operator<<(std::ostream &os, const Vector3 &value);
 
         std::string toString();
     protected:
@@ -61,9 +52,14 @@ class Vector3
         float z;
     private:
 };
-std::ostream & operator<<(std::ostream & Str, Vector3 & v);
 
+Vector3 operator+(const Vector3 &lhs, const Vector3 &rhs);
+Vector3 operator-(const Vector3 &lhs, const Vector3 &rhs);
+Vector3 operator*(const Vector3 &lhs, const Vector3 &rhs);
+Vector3 operator/(const Vector3 &lhs, const Vector3 &rhs);
+bool operator!=(const Vector3 &lhs, const Vector3 &rhs);
 Vector3 operator*(const Vector3 &lhs, const float &rhs);
 Vector3 operator*(const float &lhs, const Vector3 &rhs);
-Vector3 operator+(Vector3& left, Vector3& right);
+Vector3 operator/(const Vector3 &lhs, const float &rhs);
+
 #endif // VECTOR3_H

@@ -3,6 +3,7 @@
 #include "Vector3.h"
 #include "Image.h"
 #include <vector>
+#include "Sampler.h"
 
 class Camera
 {
@@ -11,7 +12,7 @@ public:
 	Camera(int width, int height);
 	Camera(int width, int height, Vector3 & position, Vector3 & direction);
 	Camera(int width, int height, Vector3 & position, Vector3 & direction, float near, float far);
-	Camera(int width, int height, Vector3 & position, Vector3 & direction, float near, float far, int scale);
+	Camera(int width, int height, Vector3 & position, Vector3 & direction, float near, float far, Sampler *sampler, int scale);
 	~Camera();
 	virtual void render(std::vector<SceneObject*> &objectsToRender) = 0;
 	
@@ -30,6 +31,7 @@ public:
 
 	static const Color backgroundColor;
 protected:
+	Sampler *sampler;
 	int width;
 	int height;
 	float farPlane;

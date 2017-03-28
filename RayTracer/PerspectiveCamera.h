@@ -1,5 +1,6 @@
 #pragma once
 #include "Camera.h"
+#include "Sampler.h"
 
 class PerspectiveCamera :
 	public Camera
@@ -9,7 +10,7 @@ public:
 	PerspectiveCamera(int width, int height);
 	PerspectiveCamera(int width, int height, Vector3 & position, Vector3 & direction);
 	PerspectiveCamera(int width, int height, Vector3 & position, Vector3 & direction, float near, float far);
-	PerspectiveCamera(int width, int height, float fov, Vector3 & position, Vector3 & direction, float near, float far);
+	PerspectiveCamera(int width, int height, float fov, Vector3 & position, Vector3 & direction, float near, float far, Sampler *sampler);
 
 	void render(std::vector<SceneObject*> &objectsToRender);
 	float Fov();

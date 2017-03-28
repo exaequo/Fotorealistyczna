@@ -6,7 +6,8 @@ Material::Material() : Material(Color::white){}
 
 Material::Material(Color & color)
 {
-	materialColor(color.R(), color.G(), color.B());
+	materialColor = color;
+	
 }
 
 
@@ -19,5 +20,5 @@ Color & Material::MaterialColor()
 
 void Material::MaterialColor(Color & color)
 {
-	materialColor(color.R(), color.G(), color.B());
+	materialColor = color;
 }

@@ -1,149 +1,176 @@
 #include "stdafx.h"
+#include "Color.h"
 
-#include <math.h>
-#include <iostream>
+const float Color::CLAMPED_MIN = 0.0;
+
+const float Color::CLAMPED_MAX = 1.0;
+
+const int Color::UNCLAMPED_MIN = 0;
+
+const int Color::UNCLAMPED_MAX = 255;
 
 Color Color::black = Color(0, 0, 0);
-Color Color::white = Color(1, 1, 1);
-Color Color::blue = Color(0, 0, 1);
-Color Color::red = Color(1, 0, 0);
+
+Color Color::blue = Color(0, 0, 1);;
+
+Color Color::clear = Color(0, 0, 0, 0);
+
+Color Color::cyan = Color(0, 1, 1);
+
+Color Color::gray = Color(0.5, 0.5, 0.5);
+
 Color Color::green = Color(0, 1, 0);
+
+Color Color::magenta = Color(1, 0, 1);
+
+Color Color::red = Color(1, 0, 0);
+
+Color Color::white = Color(1, 1, 1);
+
 Color Color::yellow = Color(1, 1, 0);
-Color Color::purple = Color(1, 0, 1);
 
-Color::Color():Color(0,0,0){}
+Color::Color() :
+	r(0.0),
+	g(0.0),
+	b(0.0),
+	a(0.0)
+{ }
 
-Color::Color(float r, float g, float b)
-{
-	this->r = clamp01(r);
-	this->g = clamp01(g);
-	this->b = clamp01(b);
-}
+template <typename T>
+Color::Color(T r, T g, T b, T a) :
+	r(static_cast<float>(r)),
+	g(static_cast<float>(g)),
+	b(static_cast<float>(b)),
+	a(static_cast<float>(a))
+{ }
 
-Color::Color(float r, float g) : Color(r,g,0){}
-
-Color::Color(float r) : Color(r, 0, 0) {}
-
+Color::Color(const Color &color) :
+	r(color.r),
+	g(color.g),
+	b(color.b),
+	a(color.a)
+{ }
 
 Color::~Color()
+{ }
+
+Color Color::GetGrayscale(const Color &color)
 {
+	Color result;
+	float inversedThree = 1.0f / 3.0f;
+
+	result.r = (color.r + color.g + color.b) * inversedThree;
+	result.g = (color.r + color.g + color.b) * inversedThree;
+	result.b = (color.r + color.g + color.b) * inversedThree;
+	result.a = color.a;
+
+	return result;
 }
 
-float Color::R()
+Color Color::GetGrayscale()
 {
-	return r;
+	Color result;
+	float inversedThree = 1.0f / 3.0f;
+
+	result.r = (r + g + b) * inversedThree;
+	result.g = (r + g + b) * inversedThree;
+	result.b = (r + g + b) * inversedThree;
+	result.a = a;
+
+	return result;
 }
 
-void Color::R(float value)
+Color& Color::Clamp(Color &color)
 {
-	r = clamp01(value);
+	color.r = clamp01(color.r);
+	color.g = clamp01(color.g);
+	color.b = clamp01(color.b);
+	color.a = clamp01(color.a);
+
+	return color;
 }
 
-float Color::G()
+void Color::Clamp()
 {
-	return g;
+	r = clamp01(r);
+	g = clamp01(g);
+	b = clamp01(b);
+	a = clamp01(a);
 }
 
-void Color::G(float value)
+int Color::UnclampedR(const Color &color)
 {
-	g = clamp01(value);
+	return static_cast<int>(color.r * UNCLAMPED_MAX);
 }
 
-float Color::B()
+int Color::UnclampedR()
 {
-	return b;
+	return static_cast<int>(r * UNCLAMPED_MAX);
 }
 
-void Color::B(float value)
+int Color::UnclampedG(const Color &color)
 {
-	b = clamp01(value);
+	return static_cast<int>(color.g * UNCLAMPED_MAX);
 }
 
-void Color::add(float R, float G, float B)
+int Color::UnclampedG()
 {
-	this->R(r + R);
-	this->G(g + G);
-	this->B(b + B);
+	return static_cast<int>(g * UNCLAMPED_MAX);
 }
 
-void Color::operator()(float R, float G, float B)
+int Color::UnclampedB(const Color &color)
 {
-	this->R(R);
-	this->G(G);
-	this->B(B);
+	return static_cast<int>(color.b * UNCLAMPED_MAX);
 }
 
-void Color::operator()(float R, float G)
+int Color::UnclampedB()
 {
-	this->R(R);
-	this->G(G);
-	this->b = 0;
+	return static_cast<int>(b * UNCLAMPED_MAX);
 }
 
-void Color::operator()(float R)
+int Color::UnclampedA(const Color &color)
 {
-	this->R(R);
-	this->g = 0;
-	this->b = 0;
+	return static_cast<int>(color.a * UNCLAMPED_MAX);
 }
 
-Color& Color::operator+(Color & li)
+int Color::UnclampedA()
 {
-	return *(new Color(r + li.R(), g + li.G(), b + li.B()));
+	return static_cast<int>(a * UNCLAMPED_MAX);
 }
 
-Color& Color::operator-(Color & li)
+Color& Color::operator-=(const Color &rhs)
 {
-	return *(new Color(r - li.R(), g - li.G(), b - li.B()));
-}
+	r -= rhs.r;
+	g -= rhs.g;
+	b -= rhs.b;
 
-//Color& Color::operator/(float num)
-//{
-//	if (num != 0) {
-//		return Color(r / num, g / num, b / num);
-//	}
-//	else {
-//		return Color(1, 1, 1);
-//		std::cout << "Dividin light intensity by 0\n";
-//	}
-//}
-
-Color & Color::operator+=(Color & li)
-{
-	this->R(r + li.R());
-	this->G(g + li.G());
-	this->B(b + li.B());
 	return *this;
 }
 
-Color & Color::operator-=(Color & li)
+Color& Color::operator/=(const Color &rhs)
 {
-	this->R(r - li.R());
-	this->G(g - li.G());
-	this->B(b - li.B());
+	r /= rhs.r;
+	g /= rhs.g;
+	b /= rhs.b;
+
 	return *this;
 }
 
-Color & Color::operator*=(float num)
+Color& Color::operator*=(const Color &rhs)
 {
-	this->R(r * num);
-	this->G(g * num);
-	this->B(b * num);
+	r *= rhs.r;
+	g *= rhs.g;
+	b *= rhs.b;
+
 	return *this;
 }
 
-Color & Color::operator/=(float num)
+Color& Color::operator+=(const Color &rhs)
 {
-	if (num != 0) {
-		this->R(r / num);
-		this->G(g / num);
-		this->B(b / num);
-	}
-	else {
-		r = 1;
-		g = 1;
-		b = 1;
-	}
+	r += rhs.r;
+	g += rhs.g;
+	b += rhs.b;
+
 	return *this;
 }
 
@@ -152,32 +179,124 @@ Color& Color::operator=(const Color &rhs)
 	r = rhs.r;
 	g = rhs.g;
 	b = rhs.b;
+	a = rhs.a;
 
 	return *this;
 }
 
-Color & operator*(float num, Color & li)
+//template<typename T>
+Color& Color::operator*=(const float &rhs)
 {
-	return *(new Color(li.R() * num, li.G() * num, li.B() * num));
+	r *= rhs;
+	g *= rhs;
+	b *= rhs;
+
+	return *this;
 }
 
-Color & operator*(Color & li, float num)
+//template<typename T>
+Color& Color::operator/=(const float &rhs)
 {
-	return *(new Color(li.R() * num, li.G() * num, li.B() * num));
+	r /= rhs;
+	g /= rhs;
+	b /= rhs;
+
+	return *this;
 }
 
-Color & operator/(float num, Color & li)
+//template<typename T>
+Color operator/(const Color &lhs, const float &rhs)
 {
-	return *(new Color(li.R() / num, li.G() / num, li.B() / num));
+	Color result = lhs;
+
+	result /= rhs;
+
+	return result;
 }
 
-Color & operator/(Color & li, float num)
+
+//template<typename T>
+Color operator*(const Color &lhs, const float &rhs)
 {
-	return *(new Color(li.R() / num, li.G() / num, li.B() / num));
+	Color result = lhs;
+
+	result *= rhs;
+
+	return result;
 }
 
-std::ostream & operator<<(std::ostream & str, Color & li)
+//template<typename T>
+Color operator*(const float &lhs, const Color &rhs)
 {
-	str << "(R:" << li.R() << ", G:" << li.G() << ", B:" << li.B() << ")";
-	return str;
+	Color result = rhs;
+
+	result *= lhs;
+
+	return result;
+}
+
+bool operator==(const Color &lhs, const Color &rhs)
+{
+	bool result = false;
+	if (lhs.r == rhs.r && lhs.g == rhs.g && lhs.b == rhs.b && lhs.a == rhs.a)
+	{
+		result = true;
+	}
+
+	return result;
+}
+
+bool operator!=(const Color &lhs, const Color &rhs)
+{
+	return !(lhs == rhs);
+}
+
+std::ostream &operator<<(std::ostream &os, const Color &value)
+{
+	os << "(" << value.r << ", " << value.g << ", " << value.b << ", " << value.a << ")";
+
+	return os;
+}
+
+std::istream &operator >> (std::istream &is, Color &value)
+{
+	is >> value.r >> value.g >> value.b >> value.a;
+
+	return is;
+}
+
+Color operator+(const Color &lhs, const Color &rhs)
+{
+	Color result = lhs;
+
+	result += rhs;
+
+	return result;
+}
+
+Color operator-(const Color &lhs, const Color &rhs)
+{
+	Color result = lhs;
+
+	result -= rhs;
+
+	return result;
+}
+
+Color operator*(const Color &lhs, const Color &rhs)
+{
+	Color result = lhs;
+
+	result *= rhs;
+
+	return result;
+}
+
+Color operator/(const Color &lhs, const Color &rhs)
+{
+	Color result = lhs;
+
+	result /= rhs;
+
+	return result;
 }
