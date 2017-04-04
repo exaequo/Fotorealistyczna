@@ -13,7 +13,6 @@
 
 #include "Vector2.h"
 #include "Vector3.h"
-#include "SceneObject.h"
 #include "Primitive.h"
 #include "Sphere.h"
 #include "Plane.h"
@@ -21,14 +20,29 @@
 #include "Color.h"
 #include "Material.h"
 #include "Camera.h"
-#include "OrthogonalCamera.h"
+#include "OrthographicCamera.h"
 #include "PerspectiveCamera.h"
 #include "BMP.h"
 #include "Image.h"
-#include "Sampler.h"
-#include "RegularSampler.h"
 
-float clamp01(float value);
+
+#include <iostream>
+#include "fstream"
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <array>
+#define EPSILON 0.000001f
+
+float& ClampSingle(float &x, const float min, const float max);
+float DegreesToRadians(const float& degrees);
+float RadiansToDegrees(const float& radians);
+
+template<typename T>
+inline T sqr(T x)
+{
+	return (x * x);
+}
 
 
 

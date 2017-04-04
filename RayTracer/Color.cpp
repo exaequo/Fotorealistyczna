@@ -29,19 +29,13 @@ Color Color::white = Color(1, 1, 1);
 
 Color Color::yellow = Color(1, 1, 0);
 
-Color::Color() :
-	r(0.0),
-	g(0.0),
-	b(0.0),
-	a(0.0)
-{ }
+Color Color::undefined = Color(-1, -1, -1, -1);
 
-template <typename T>
-Color::Color(T r, T g, T b, T a) :
-	r(static_cast<float>(r)),
-	g(static_cast<float>(g)),
-	b(static_cast<float>(b)),
-	a(static_cast<float>(a))
+Color::Color() :
+	r(0.0f),
+	g(0.0f),
+	b(0.0f),
+	a(0.0f)
 { }
 
 Color::Color(const Color &color) :
@@ -49,6 +43,20 @@ Color::Color(const Color &color) :
 	g(color.g),
 	b(color.b),
 	a(color.a)
+{ }
+
+Color::Color(const float &r, const float& g, const float &b) :
+	r(r),
+	g(g),
+	b(b),
+	a(1.0f)
+{ }
+
+Color::Color(const float &r, const float& g, const float &b, const float &a) :
+	r(r),
+	g(g),
+	b(b),
+	a(a)
 { }
 
 Color::~Color()
@@ -82,20 +90,20 @@ Color Color::GetGrayscale()
 
 Color& Color::Clamp(Color &color)
 {
-	color.r = clamp01(color.r);
-	color.g = clamp01(color.g);
-	color.b = clamp01(color.b);
-	color.a = clamp01(color.a);
+	color.r = ClampSingle(color.r, CLAMPED_MIN, CLAMPED_MIN);
+	color.g = ClampSingle(color.g, CLAMPED_MIN, CLAMPED_MAX);
+	color.b = ClampSingle(color.b, CLAMPED_MIN, CLAMPED_MAX);
+	color.a = ClampSingle(color.a, CLAMPED_MIN, CLAMPED_MAX);
 
 	return color;
 }
 
 void Color::Clamp()
 {
-	r = clamp01(r);
-	g = clamp01(g);
-	b = clamp01(b);
-	a = clamp01(a);
+	r = ClampSingle(r, CLAMPED_MIN, CLAMPED_MIN);
+	g = ClampSingle(g, CLAMPED_MIN, CLAMPED_MAX);
+	b = ClampSingle(b, CLAMPED_MIN, CLAMPED_MAX);
+	a = ClampSingle(a, CLAMPED_MIN, CLAMPED_MAX);
 }
 
 int Color::UnclampedR(const Color &color)

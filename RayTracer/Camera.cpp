@@ -1,94 +1,144 @@
 #include "stdafx.h"
 #include "Camera.h"
-#include "Sampler.h"
-#include "RegularSampler.h"
+#include "AdaptiveSampler.h"
 
-const Color Camera::backgroundColor = Color::black;
 
-Camera::Camera():Camera(256,256,Vector3::zero,Vector3::forward,0,10000, new RegularSampler(), 1){}
+Camera::Camera() :
+	position(Vector3(0.0f, 0.0f, 0.0f)),
+	lookAtPoint(Vector3(0.0f, 0.0f, 0.0f)),
+	viewDirection(Vector3(0.0f, 0.0f, 0.0f)),
+	up(Vector3::up),
+	right(Vector3::right),
+	nearPlane(0.0f),
+	farPlane(0.0f),
+	fov(0.0f),
+	image(Image(0, 0)),
+	sampler(new AdaptiveSampler())
+{ }
 
-Camera::Camera(int width, int height):Camera(width,height,Vector3::zero,Vector3::forward,0,10000, new RegularSampler(), 1){}
-
-Camera::Camera(int width, int height, Vector3 & position, Vector3 & direction):Camera(width,height,position,direction,0,10000, new RegularSampler(), 1){}
-
-Camera::Camera(int width, int height, Vector3 & position, Vector3 & direction, float near, float far) : Camera(width, height, position, direction, near, far, new RegularSampler(),1){}
-
-Camera::Camera(int width, int height, Vector3 & position, Vector3 & direction, float near, float far, Sampler* sampler, int scale)
+Camera::Camera(
+	const Vector3 &position,
+	const Vector3 &lookAtPoint,
+	const unsigned int width,
+	const unsigned int height,
+	AdaptiveSampler* sampler
+	) :
+	position(position),
+	lookAtPoint(lookAtPoint),
+	up(Vector3::up),
+	right(Vector3::right),
+	nearPlane(0.1f),
+	farPlane(1000.0f),
+	fov(45.0f),
+	aspectRatio(static_cast<float>(width) / static_cast<float>(height)),
+	image(Image(width, height)),
+	sampler(sampler)
 {
-	this->width = width;
-	this->height = height;
-	this->nearPlane = near;
-	this->farPlane = far;
-	this->position = position;
-	this->direction = direction;
-	this->scale = scale;
-	this->sampler = sampler;
-
-	this->image = *(new Image(width, height));
-	this->direction.normalize();
-	aspectRatio = (static_cast<float>(width) / static_cast<float>(height));
+	CalculateViewVector();
 }
 
-
-
-Camera::~Camera(){}
-
-int Camera::Width()
+Camera::Camera(
+	const Vector3 &position,
+	const Vector3 &lookAtPoint,
+	const float &nearPlane,
+	const float &farPlane,
+	const float &fov,
+	const unsigned int width,
+	const unsigned int height,
+	AdaptiveSampler* sampler
+	) :
+	position(position),
+	lookAtPoint(lookAtPoint),
+	up(Vector3::up),
+	right(Vector3::right),
+	nearPlane(nearPlane),
+	farPlane(farPlane),
+	fov(fov),
+	aspectRatio(static_cast<float>(width) / static_cast<float>(height)),
+	image(Image(width, height)),
+	sampler(sampler)
 {
-	return width;
+	CalculateViewVector();
 }
 
-void Camera::Width(int value)
+Camera::Camera(
+	const Vector3 &position,
+	const Vector3 &lookAtPoint,
+	const Vector3 &up,
+	const unsigned int width,
+	const unsigned int height,
+	AdaptiveSampler* sampler
+	) :
+	position(position),
+	lookAtPoint(lookAtPoint),
+	up(up),
+	right(Vector3::right),
+	nearPlane(nearPlane),
+	farPlane(farPlane),
+	fov(fov),
+	aspectRatio(static_cast<float>(width) / static_cast<float>(height)),
+	image(Image(width, height)),
+	sampler(sampler)
 {
-	width = value;
+	CalculateViewVector();
 }
 
-int Camera::Height()
+Camera::Camera(
+	const Vector3 &position,
+	const Vector3 &lookAtPoint,
+	const Vector3 &up,
+	const float &nearPlane,
+	const float &farPlane,
+	const float &fov,
+	const unsigned int width,
+	const unsigned int height,
+	AdaptiveSampler* sampler
+	) :
+	position(position),
+	lookAtPoint(lookAtPoint),
+	up(up),
+	right(Vector3::right),
+	nearPlane(nearPlane),
+	farPlane(farPlane),
+	fov(fov),
+	aspectRatio(static_cast<float>(width) / static_cast<float>(height)),
+	image(Image(width, height)),
+	sampler(sampler)
 {
-	return height;
+	CalculateViewVector();
 }
 
-void Camera::Height(int value)
+Camera::~Camera()
+{ }
+
+void Camera::CalculateViewVector()
 {
-	height = value;
+	viewDirection = Vector3(lookAtPoint.X() - position.X(), lookAtPoint.Y() - position.Y(), lookAtPoint.Z() - position.Z());
+
+	viewDirection.Normalize();
 }
 
-float Camera::FarPlane()
+Vector3 Camera::CalculateViewVector(const Vector3 &origin, const Vector3 &destination)
 {
-	return farPlane;
+	Vector3 result;
+	result = Vector3(destination.X() - origin.X(), destination.Y() - origin.Y(), destination.Z() - origin.Z());
+
+	result.Normalize();
+	return result;
 }
 
-void Camera::FarPlane(float value)
+void Camera::CalculateUpVector()
 {
-	farPlane = value;
+	CalculateRightVector();
+
+	up = Vector3::Cross((-viewDirection), right);
+	up.Normalize();
 }
 
-float Camera::NearPlane()
+void Camera::CalculateRightVector()
 {
-	return nearPlane;
-}
+	CalculateViewVector();
 
-void Camera::NearPlane(float value)
-{
-	nearPlane = value;
-}
-
-Vector3 Camera::Position()
-{
-	return position;
-}
-
-void Camera::Position(Vector3 & value)
-{
-	position = value;
-}
-
-Vector3 Camera::Direction()
-{
-	return direction;
-}
-
-void Camera::Direction(Vector3 & value)
-{
-	direction = value;
+	right = Vector3::Cross(up, (-viewDirection));
+	right.Normalize();
 }

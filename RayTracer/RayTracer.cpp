@@ -1,36 +1,86 @@
-// RayTracer.cpp : Defines the entry point for the console application.
-//
-
 #include "stdafx.h"
-#include <iostream>
-#include <vector>
+#include "Vector2.h"
+#include "Vector3.h"
+#include "Ray.h"
+#include "Sphere.h"
+#include "Plane.h"
+#include "Scene.h"
+#include "OrthographicCamera.h"
+#include "PerspectiveCamera.h"
+#include "AdaptiveSampler.h"
+#include "Triangle.h"
+#include "Mesh.h"
+
+
+#include <chrono> // time measurement
 
 using namespace std;
+using namespace std::chrono;
 
 int main()
 {
-	vector<SceneObject *> objToRender;
+	Scene scene = Scene();
+	Primitive *sphere1 = new Sphere(Vector3(0.0f, 0.0f, 0.0f), 1.2f, Color::red);
+	Primitive *sphere2 = new Sphere(Vector3(-2.5f, 0.5f, 1.0f), 1.0f, Color::blue);
+	Primitive *plane2 = new Plane(Vector3(0.0f, -0.5f, 0.0f), Vector3(0.1f, 0.9f, -0.1f), Color::yellow);
 
-	SceneObject *sphere1 = new Sphere(Vector3::zero, 1, Material(Color::red));
-	SceneObject *sphere2 = new Sphere(Vector3(0.5f, 0.5f, -1), 1, Material(Color::blue));
-	SceneObject *plane1 = new Plane(Vector3(0,-0.5f,0), Vector3(-0.1f, 0.9f, -0.1f),Material(Color::green));
-	
-	objToRender.push_back(plane1);
-	objToRender.push_back(sphere1);
-	objToRender.push_back(sphere2);
-	
+	Mesh meshCube = Mesh("cube", Color::cyan);
+	Mesh meshCone = Mesh("cone", Color::white);
 
-	OrthogonalCamera cam1(640, 480, Vector3(0, 0, -10), Vector3::forward, 0, 100, 2, new RegularSampler(16));
-	cam1.render(objToRender);
-	cout << "Orto rendered\n";
+	scene.AddPrimitveToScene(sphere2);
+	scene.AddPrimitveToScene(sphere1);
+	scene.AddPrimitveToScene(plane2);
+	scene.AddPrimitveToScene(meshCube);
+	scene.AddPrimitveToScene(meshCone);
 
-	PerspectiveCamera cam2(640, 480, 45.0f, Vector3(0, 0, -10), Vector3::forward, 0.01f, 100, new RegularSampler(16));
 
-	cam2.render(objToRender);
-	cout << "Persp rendered\n";
+	unsigned int width = 1024;
+	unsigned int height = 1024;
+
+	OrthographicCamera OrtCamera = OrthographicCamera(
+		Vector3(0.0f, 0.0f, -10.0f),
+		Vector3::forward,
+		width,
+		height,
+		10.0f,
+		nullptr
+		//new AdaptiveSampler(1, 4, 0.05f)
+		);
+
+	auto time1 = high_resolution_clock::now();
+	OrtCamera.RenderScene(scene.Primitives());
+	auto time2 = high_resolution_clock::now();
+
+	auto duration = duration_cast<milliseconds>(time2 - time1).count() / 1000.0f;
+
+	cout << "Othographic: " << duration << " seconds" << endl;
+
+	PerspectiveCamera Perspective = PerspectiveCamera(
+		Vector3(0.0f, 0.0f, -10.0f),
+		Vector3(0.0f, 0.0f, 300.0f),
+		Vector3::up,
+		0.1f,
+		1000.0f,
+		45.0f,
+		width,
+		height,
+		nullptr
+		//new AdaptiveSampler(1, 4, 0.05f)
+		);
+
+
+	time1 = high_resolution_clock::now();
+	Perspective.RenderScene(scene.Primitives());
+	time2 = high_resolution_clock::now();
+	duration = duration_cast<milliseconds>(time2 - time1).count() / 1000.0f;
+	cout << "Persp: " << duration << " seconds" << endl;
+
+	delete sphere1;
+	delete sphere2;
 
 	system("pause");
-    return 0;
+
+	return 0;
 
 }
 

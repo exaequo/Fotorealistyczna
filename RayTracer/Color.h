@@ -19,6 +19,7 @@ public:
 	static Color red;
 	static Color white;
 	static Color yellow;
+	static Color undefined;
 
 	static Color GetGrayscale(const Color &color);
 	static Color& Clamp(Color &color);
@@ -30,8 +31,8 @@ public:
 
 #pragma region Member Functions & Constructors
 	Color();
-	template <typename T>
-	Color(T r, T g, T b, T a = 0.0);
+	Color(const float &r, const float& g, const float &b);
+	Color(const float &r, const float& g, const float &b, const float &a);
 	Color(const Color &color);
 	~Color();
 

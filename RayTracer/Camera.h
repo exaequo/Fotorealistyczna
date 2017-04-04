@@ -1,45 +1,94 @@
 #pragma once
-#include "SceneObject.h"
+#include "Vector2.h"
 #include "Vector3.h"
 #include "Image.h"
+#include "Primitive.h"
 #include <vector>
-#include "Sampler.h"
 
 class Camera
 {
 public:
+	friend class AdaptiveSampler;
 	Camera();
-	Camera(int width, int height);
-	Camera(int width, int height, Vector3 & position, Vector3 & direction);
-	Camera(int width, int height, Vector3 & position, Vector3 & direction, float near, float far);
-	Camera(int width, int height, Vector3 & position, Vector3 & direction, float near, float far, Sampler *sampler, int scale);
-	~Camera();
-	virtual void render(std::vector<SceneObject*> &objectsToRender) = 0;
-	
-	int Width();
-	void Width(int value);
-	int Height();
-	void Height(int value);
-	float FarPlane();
-	void FarPlane(float value);
-	float NearPlane();
-	void NearPlane(float value);
-	Vector3 Position();
-	void Position(Vector3 & value);
-	Vector3 Direction();
-	void Direction(Vector3 & value);
 
-	static const Color backgroundColor;
+	Camera(
+		const Vector3 &position,
+		const Vector3 &lookAtPoint,
+		const unsigned int width,
+		const unsigned int height,
+		AdaptiveSampler* sampler
+		);
+
+	Camera(
+		const Vector3 &position,
+		const Vector3 &lookAtPoint,
+		const float &nearPlane,
+		const float &farPlane,
+		const float &fov,
+		const unsigned int width,
+		const unsigned int height,
+		AdaptiveSampler* sampler
+		);
+
+	Camera(
+		const Vector3 &position,
+		const Vector3 &lookAtPoint,
+		const Vector3 &up,
+		const unsigned int width,
+		const unsigned int height,
+		AdaptiveSampler* sampler
+		);
+
+	Camera(
+		const Vector3 &position,
+		const Vector3 &lookAtPoint,
+		const Vector3 &up,
+		const float &nearPlane,
+		const float &farPlane,
+		const float &fov,
+		const unsigned int width,
+		const unsigned int height,
+		AdaptiveSampler* sampler
+		);
+	~Camera();
+
+	static Vector3 CalculateViewVector(const Vector3 &origin, const Vector3 &destination);
+
+	void CalculateViewVector();
+	void CalculateUpVector();
+	void CalculateRightVector();
+
+	virtual void RenderScene(vector<Primitive*> &primitives) = 0;
+	virtual Color CalculateSingleSample(const Vector2 &coord, const int &row, const int &column, vector<Primitive*> &primitives) = 0;
+
+	Vector3 Position() const { return position; }
+	void Position(Vector3 val) { position = val; }
+	Vector3 LookAtPoint() const { return lookAtPoint; }
+	void LookAtPoint(Vector3 val) { lookAtPoint = val; }
+	Vector3 ViewDirection() const { return viewDirection; }
+	void ViewDirection(Vector3 val) { viewDirection = val; }
+	Vector3 Up() const { return up; }
+	void Up(Vector3 val) { up = val; }
+	Vector3 Right() const { return right; }
+	void Right(Vector3 val) { right = val; }
+	float NearPlane() const { return nearPlane; }
+	void NearPlane(float val) { nearPlane = val; }
+	float FarPlane() const { return farPlane; }
+	void FarPlane(float val) { farPlane = val; }
+	float Fov() const { return fov; }
+	void Fov(float val) { fov = val; }
+
 protected:
-	Sampler *sampler;
-	int width;
-	int height;
-	float farPlane;
-	float nearPlane;
-	Vector3 position;
-	Vector3 direction;
-	float aspectRatio;
-	int scale;
+	AdaptiveSampler *sampler;
 	Image image;
+	Vector3 position;
+	Vector3 lookAtPoint;
+	Vector3 viewDirection;
+	Vector3 up;
+	Vector3 right;
+	float nearPlane;
+	float farPlane;
+	float fov;
+	float aspectRatio;
 };
 

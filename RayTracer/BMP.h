@@ -1,7 +1,6 @@
 #pragma once
-#include <iostream>
-#include <vector>
-
+#include "Color.h"
+#include <string>
 using namespace std;
 
 struct ColorStruct

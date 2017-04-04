@@ -2,23 +2,18 @@
 #include "Material.h"
 
 
-Material::Material() : Material(Color::white){}
-
-Material::Material(Color & color)
-{
-	materialColor = color;
-	
-}
+Material::Material() :
+	colorAmbient(Color::black)
+{ }
 
 
-Material::~Material(){}
+Material::Material(const Color &colorAmbient) :
+	colorAmbient(colorAmbient)
+{ }
 
-Color & Material::MaterialColor()
-{
-	return materialColor;
-}
+Material::Material(std::string name) :
+	materialName(name)
+{ }
 
-void Material::MaterialColor(Color & color)
-{
-	materialColor = color;
-}
+Material::~Material()
+{ }

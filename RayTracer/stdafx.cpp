@@ -7,14 +7,27 @@
 // TODO: reference any additional headers you need in STDAFX.H
 // and not in this file
 
-float clamp01(float value)
+
+float& ClampSingle(float &x, const float min, const float max)
 {
-	float result = value;
-	if (result < 0) {
-		result = 0;
+	if (x < min)
+	{
+		x = min;
 	}
-	if (result > 1) {
-		result = 1;
+	else if (x > max)
+	{
+		x = max;
 	}
-	return result;
+
+	return x;
+}
+
+float DegreesToRadians(const float& degrees)
+{
+	return (static_cast<float>(degrees * M_PI) / 180.0f);
+}
+
+float RadiansToDegrees(const float& radians)
+{
+	return radians * 180.0f / static_cast<float>(M_PI);
 }

@@ -7,6 +7,7 @@ Image::Image() :
 	image(BMP(width, height))
 {
 	InitializePixels();
+	CalculatePixelDimensions();
 }
 
 Image::Image(const unsigned int width, const unsigned int height) :
@@ -15,11 +16,20 @@ Image::Image(const unsigned int width, const unsigned int height) :
 	image(BMP(width, height))
 {
 	InitializePixels();
+	CalculatePixelDimensions();
 }
 
 Image::~Image()
 {
 	DestroyPixels();
+}
+
+void Image::CalculatePixelDimensions()
+{
+	pixelWidth = 1.0f / width;
+	pixelHeight = 1.0f / height;
+	halfPixelWidth = 0.5f * pixelWidth;
+	halfpixelHeight = 0.5f * pixelHeight;
 }
 
 void Image::InitializePixels()

@@ -1,24 +1,24 @@
-#ifndef PLANE_H
-#define PLANE_H
-#include "Ray.h"
+#pragma once
 #include "Vector3.h"
 #include "Primitive.h"
-#include "Material.h"
 
 class Plane : public Primitive
 {
-    public:
-        Plane();
-        Plane(Vector3 &point, Vector3 &normal);
-		Plane(Vector3 &point, Vector3 &normal, Material &material);
-        virtual ~Plane();
-        int intersect(Ray& ray, Vector3& hitpoint);
-        float Distance();
-    protected:
-        Vector3 normal;
-        Vector3 point;
-        float dist;
-    private:
-};
+public:
+	Plane();
+	Plane(const Vector3 &center, const Vector3 &normal);
+	Plane(const Vector3 &center, const Vector3 &normal, const Material &material);
+	~Plane();
 
-#endif // PLANE_H
+	virtual bool Intersect(Ray &ray);
+	virtual void IntersectionOutput(const Ray &ray);
+
+	float IntersectReturnT(Ray &ray);
+
+	friend std::ostream &operator<<(std::ostream &os, const Plane &value);
+
+	Vector3 Normal() const { return normal; }
+	void Normal(Vector3 val) { normal = val; }
+private:
+	Vector3 normal;
+};
